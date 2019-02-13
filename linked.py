@@ -6,8 +6,11 @@ class Node:
 
 class Linked:
     def __init__(self, lst):
-        self.head = Node()
-        
+        if 0 == len(lst):
+            self.head = None
+            return
+
+        self.head = Node()        
         node = self.head
         prev = None
         for item in lst:
@@ -22,3 +25,43 @@ class Linked:
         node.next = self.head
         self.head = node
 
+    def __iter__(self):
+        self.cur = self.head
+        return self
+    def __next__(self):
+        if None == self.cur:
+            raise StopIteration
+        else:
+            result = self.cur.value
+            self.cur = self.cur.next
+            return result
+
+#
+import unittest
+
+class TestLinked(unittest.TestCase):
+
+    def test_list(self):
+        self.assertEqual([], list(Linked([])))
+        self.assertEqual([1], list(Linked([1])))
+        self.assertEqual([1,2], list(Linked([1,2])))
+        self.assertEqual([1,2,3], list(Linked([1,2,3])))
+        self.assertEqual([1,2,3,4], list(Linked([1,2,3,4])))
+
+    def test_append(self):
+        lst = Linked([])
+        lst.append(3)
+        lst.append(2)
+        lst.append(1)
+
+        self.assertEqual([1,2,3], list(lst))
+
+    def test_append_2(self):
+        lst = Linked([3,4])
+        lst.append(2)
+        lst.append(1)
+
+        self.assertEqual([1,2,3,4], list(lst))
+
+if __name__ == '__main__':
+    unittest.main()
