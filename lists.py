@@ -66,7 +66,17 @@ def removedup2(lst):
             prev = p
             p = p.next
     return lst
-#
+
+def removenode(node):
+    '''удалить элемент из середины связного списка
+    доступ предоставляется только к этому узлу
+    '''
+    assert None != node and None != node.next
+
+    next = node.next
+    node.value = next.value
+    node.next = next.next
+
 #
 import unittest
 
@@ -164,6 +174,21 @@ class TestLists(unittest.TestCase):
 
         lst = removedup2(Linked([1,1,1,1,1,1,1,2,2,2,2]))
         self.assertEqual([1,2], list(lst))
+
+    def test_removenode(self):
+        lst = Linked([1,2,3,4,5])
+        
+        node2 = lst.head.next
+        removenode(node2)
+        self.assertEqual([1,3,4,5], list(lst))
+
+        node3 = lst.head.next
+        removenode(node3)
+        self.assertEqual([1,4,5], list(lst))
+
+        node4 = lst.head.next
+        removenode(node4)
+        self.assertEqual([1,5], list(lst))
 
 if __name__ == '__main__':
     unittest.main()
