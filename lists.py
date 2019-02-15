@@ -108,6 +108,39 @@ def ispalindrome(lst):
 
     return True
 
+def sumlists(lst1, lst2):
+    ''' суммировать два числа, представленных в виде связных списков
+    каждый узел такого списка пред­ставляет один разряд, все цифры хранятся в обратном порядке
+    результат возвращать также в виде связного списка
+    '''
+    p1 = lst1.head
+    p2 = lst2.head
+    
+    m = 0
+    res = []
+    while None != p1 or None != p2:
+        s = m
+        if None != p1:
+            s += p1.value
+        if None != p2:
+            s += p2.value
+
+        if s >= 10:
+            res += [s - 10]
+            m = 1
+        else:
+            res += [s]
+            m = 0
+
+        if None != p1:
+            p1 = p1.next
+        if None != p2:
+            p2 = p2.next
+
+    if m > 0:
+        res += [1]
+
+    return Linked(res)
 #
 import unittest
 
@@ -240,6 +273,40 @@ class TestLists(unittest.TestCase):
         self.assertFalse(ispalindrome(Linked([1,2,3,4,5])))
         self.assertFalse(ispalindrome(Linked([1,2,3,3,3,1])))
         self.assertFalse(ispalindrome(Linked([1,2,3,3,3,3,1])))
+
+    def test_sumlists(self):
+        lst = sumlists(Linked([0]), Linked([0]))
+        self.assertEqual([0], list(lst))
+
+        lst = sumlists(Linked([3]), Linked([3]))
+        self.assertEqual([6], list(lst))
+
+        lst = sumlists(Linked([5]), Linked([5]))
+        self.assertEqual([0,1], list(lst))
+
+        lst = sumlists(Linked([5]), Linked([7]))
+        self.assertEqual([2,1], list(lst))
+
+        lst = sumlists(Linked([1,1,1]), Linked([9]))
+        self.assertEqual([0,2,1], list(lst))
+
+        lst = sumlists(Linked([0,0,1]), Linked([0,0,2]))
+        self.assertEqual([0,0,3], list(lst))
+
+        lst = sumlists(Linked([7,1,6]), Linked([5,9,2]))
+        self.assertEqual([2,1,9], list(lst))
+
+        lst = sumlists(Linked([2,4,5]), Linked([4,0,2]))
+        self.assertEqual([6,4,7], list(lst))
+
+        lst = sumlists(Linked([9,9,9]), Linked([9,9,9]))
+        self.assertEqual([8,9,9,1], list(lst))
+
+        lst = sumlists(Linked([5,2]), Linked([1,0,0,1]))
+        self.assertEqual([6,2,0,1], list(lst))
+
+        lst = sumlists(Linked([2]), Linked([9,9,9,9]))
+        self.assertEqual([1,0,0,0,1], list(lst))
 
 if __name__ == '__main__':
     unittest.main()
