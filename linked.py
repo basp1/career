@@ -25,6 +25,35 @@ class Linked:
         node.next = self.head
         self.head = node
 
+    def reverse(self):
+        if None == self.head or None == self.head.next:
+            return self
+    
+        k = 0
+        p = self.head
+        n = p.next
+        p.next = None
+        while None != p:
+            if None == n:
+                self.head = p
+                break
+            t = n.next
+            n.next = p
+            p = n
+            n = t
+        
+        return self
+
+    def __len__(self):        
+        k = 0
+
+        p = self.head
+        while None != p:
+            k += 1
+            p = p.next
+
+        return k
+
     def __iter__(self):
         self.cur = self.head
         return self
@@ -62,6 +91,25 @@ class TestLinked(unittest.TestCase):
         lst.append(1)
 
         self.assertEqual([1,2,3,4], list(lst))
+
+    def test_reverse(self):        
+        lst = Linked([])
+        self.assertEqual([], list(lst.reverse()))
+
+        lst = Linked([1])
+        self.assertEqual([1], list(lst.reverse()))
+
+        lst = Linked([1,2])
+        self.assertEqual([2,1], list(lst.reverse()))
+
+        lst = Linked([1,2,3])
+        self.assertEqual([3,2,1], list(lst.reverse()))
+
+        lst = Linked([1,2,3,4])
+        self.assertEqual([4,3,2,1], list(lst.reverse()))
+
+        lst = Linked([1,2,3,4,5])
+        self.assertEqual([5,4,3,2,1], list(lst.reverse()))
 
 if __name__ == '__main__':
     unittest.main()
