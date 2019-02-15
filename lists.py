@@ -77,9 +77,39 @@ def removenode(node):
     node.value = next.value
     node.next = next.next
 
+    
+def ispalindrome(lst):
+    '''является ли связный список палиндромом
+    '''
+    n = len(lst)
+
+    if n < 2:
+        return True
+    
+    i = 0
+    p = lst.head
+    stack = []
+    while i < int(n / 2):
+        stack += [p.value]
+        p = p.next
+        i += 1
+
+    if 1 == (n % 2):
+        i += 1
+        p = p.next
+
+    j = len(stack) - 1
+    while i < n:
+        if stack[j] != p.value:
+            return False
+        p = p.next        
+        j -= 1
+        i += 1
+
+    return True
+
 #
 import unittest
-
 
 class TestLists(unittest.TestCase):
 
@@ -189,6 +219,27 @@ class TestLists(unittest.TestCase):
         node4 = lst.head.next
         removenode(node4)
         self.assertEqual([1,5], list(lst))
+
+    def test_ispalindrome(self):
+        self.assertTrue(ispalindrome(Linked([])))
+        self.assertTrue(ispalindrome(Linked([1])))
+        self.assertTrue(ispalindrome(Linked([1,1])))
+        self.assertTrue(ispalindrome(Linked([1,1,1])))
+        self.assertTrue(ispalindrome(Linked([1,2,1])))
+        self.assertTrue(ispalindrome(Linked([1,2,2,1])))
+        self.assertTrue(ispalindrome(Linked([1,2,1,2,1])))
+        self.assertTrue(ispalindrome(Linked([1,2,3,2,1])))
+        self.assertTrue(ispalindrome(Linked([1,2,3,3,2,1])))
+        self.assertTrue(ispalindrome(Linked([1,2,4,3,4,2,1])))
+
+        self.assertFalse(ispalindrome(Linked([1,2])))
+        self.assertFalse(ispalindrome(Linked([1,2,3])))
+        self.assertFalse(ispalindrome(Linked([1,2,3,1])))
+        self.assertFalse(ispalindrome(Linked([1,2,2,3])))
+        self.assertFalse(ispalindrome(Linked([1,2,3,2,3])))
+        self.assertFalse(ispalindrome(Linked([1,2,3,4,5])))
+        self.assertFalse(ispalindrome(Linked([1,2,3,3,3,1])))
+        self.assertFalse(ispalindrome(Linked([1,2,3,3,3,3,1])))
 
 if __name__ == '__main__':
     unittest.main()
