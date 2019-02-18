@@ -141,6 +141,30 @@ def sumlists(lst1, lst2):
         res += [1]
 
     return Linked(res)
+
+def findcycle(lst):
+    if None == lst.head or None == lst.head.next:
+        return None
+
+    p1 = lst.head
+    p2 = lst.head.next
+
+    while None != p1 and None != p2 and p1 != p2:
+        if None != p1.next:
+            p1 = p1.next
+        if None != p2.next:
+            p2 = p2.next
+        
+        if None == p2.next:
+            return None
+        else:
+            p2 = p2.next
+
+    if p1 == p2:
+        return p1
+    else:
+        return None
+
 #
 import unittest
 
@@ -307,6 +331,33 @@ class TestLists(unittest.TestCase):
 
         lst = sumlists(Linked([2]), Linked([9,9,9,9]))
         self.assertEqual([1,0,0,0,1], list(lst))
+
+    def test_findcycle(self):
+        ''' найти для кольцевого связного списка начальный узел петли
+        '''
+        lst = Linked(['a', 'b', 'c', 'd', 'e'])
+        c = lst.head.next.next
+        e = c.next.next
+        
+        self.assertEqual('c', c.value)
+        self.assertEqual(None, e.next)
+
+        e.next = c
+        self.assertEqual(c, findcycle(lst))
+
+        self.assertEqual(None, findcycle(Linked([])))
+        self.assertEqual(None, findcycle(Linked(['a'])))
+        self.assertEqual(None, findcycle(Linked(['a', 'b'])))
+        self.assertEqual(None, findcycle(Linked(['a', 'b', 'c'])))
+        self.assertEqual(None, findcycle(Linked(['a', 'b', 'c', 'd'])))
+        self.assertEqual(None, findcycle(Linked(['a', 'b', 'c', 'd', 'e'])))
+
+        lst = Linked(['a'])
+        a = lst.head
+        a.next = a
+        
+        self.assertEqual(a, findcycle(lst))
+
 
 if __name__ == '__main__':
     unittest.main()
