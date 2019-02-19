@@ -36,6 +36,10 @@ class Heap:
     def remove(self):
         assert self.count > 0
 
+        if 1 == self.count:
+            self.count = 0
+            return
+
         last = self.values[self.count - 1]
         self.values[0] = last
         self.count -= 1
@@ -147,6 +151,9 @@ class TestHeap(unittest.TestCase):
 
         h.remove()
         self.assertEqual(20, h.top())
+
+        h.remove()
+        self.assertEqual(0, h.count)
 
     def test_remove2(self):
         h = Heap(lambda x,y: min(x,y))
