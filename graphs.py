@@ -1,5 +1,58 @@
 from queues import Stack
 
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.children = {}
+
+    def add(self, child):
+        self.children[child.value] = child
+
+class PrefixTree:
+    ''' префиксное дерево
+    '''
+    def __init__(self):
+        self.root = Node(None)
+
+    def add(self, lst):
+        node = self.root
+
+        for value in lst:
+            if not(value in node.children):
+                node.children[value] = Node(value)
+            node = node.children[value]
+
+    def __iter__(self):
+        self.path = Stack()
+        self.stack = Stack([self.root])
+        self.levels = Stack([0])
+        return self
+
+    def __next__(self):
+        '''поиск всех путей на префиксном дереве
+        '''
+        if 0 == self.stack.count:
+            raise StopIteration
+        else:
+            while self.stack.count > 0:
+                node = self.stack.pop()
+                level = self.levels.pop()
+                for i in range(self.path.count - level):
+                    self.path.pop()
+                self.path.push(node.value)
+
+                if 0 == len(node.children):
+                    result = list(self.path)[1:]
+                    self.path.pop()
+                    return result
+                else:
+                    for next in node.children.values():
+                        self.stack.push(next)
+                        self.levels.push(1 + level)
+
+            return result
+
+
 class DirectedGraph:
     def __init__(self):
         self.adj = {}
