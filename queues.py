@@ -5,9 +5,11 @@ from sys import maxsize
 from linked import *
 
 class Stack:
-    def __init__(self):
+    def __init__(self, values = []):
         self.count  = 0
         self.values = []
+        for value in values:
+            self.push(value)
 
     def push(self, value):
         if self.count == len(self.values):
@@ -25,6 +27,18 @@ class Stack:
 
     def top(self):
         return self.values[self.count - 1]
+
+    def __iter__(self):
+        self.cur = 0
+        return self
+    def __next__(self):
+        if self.cur >= self.count:
+            raise StopIteration
+        else:
+            result = self.values[self.cur]
+            self.cur += 1
+            return result
+
 
 class MinStack:
     ''' стек, в котором кроме push и рор будет поддерживаться функция min, возвращающая минимальный элемент
